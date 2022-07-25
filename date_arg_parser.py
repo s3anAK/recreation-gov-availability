@@ -23,11 +23,11 @@ class date_parser:
 
     def start_of_month(self):
         self.start_date = datetime.date(int(self.dates[0][0]), int(self.dates[0][1]), 1)
-        print(self.start_date)
+        #print(self.start_date)
         self.end_date = datetime.date(int(self.dates[1][0]), int(self.dates[1][1]), int(self.dates[1][2]))
-        print(self.end_date)
+        #print(self.end_date)
         self.months = list(rrule.rrule(rrule.MONTHLY, dtstart=self.start_date, until=self.end_date))
-        print(self.months)
+        #print(self.months)
 
     def date_formatter(self):
         counter = 0
