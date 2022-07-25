@@ -9,7 +9,7 @@ class date_parser:
         self.months = ''
         self.dates = ''
 
-    def month_and_date_parser(self):
+    def date_maker(self):
         self.dates=[self.start_date.split('-'),self.end_date.split('-')]
         count1 = 0
         count2 = 0
@@ -20,16 +20,14 @@ class date_parser:
                 count2 += 1
             count1 += 1
             count2=0
-
-    def start_of_month(self):
         self.start_date = datetime.date(int(self.dates[0][0]), int(self.dates[0][1]), 1)
-        #print(self.start_date)
+        print(self.start_date)
         self.end_date = datetime.date(int(self.dates[1][0]), int(self.dates[1][1]), int(self.dates[1][2]))
-        #print(self.end_date)
-        self.months = list(rrule.rrule(rrule.MONTHLY, dtstart=self.start_date, until=self.end_date))
-        #print(self.months)
+        # print(self.end_date)
 
     def date_formatter(self):
+        self.months = list(rrule.rrule(rrule.MONTHLY, dtstart=self.start_date, until=self.end_date))
+        print(self.months)
         counter = 0
         for i in self.months:
             self.months[counter] = datetime.date(i.year,i.month,i.day)
