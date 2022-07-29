@@ -5,8 +5,9 @@ import json
 from fake_useragent import UserAgent
 from dateutil import rrule
 import re
+import smtplib
+from email.message import EmailMessage
 import argparse
-
 
 def lambda_handler(event, context=None):
     def date_maker(date, start_of_month=False):
@@ -39,17 +40,18 @@ def lambda_handler(event, context=None):
 
     def get_availability():
         ua = UserAgent()
-        availability_list = []
+        availability_list_unformatted = []
         for i in url_list:
             availability_url = i
             headers = {'apikey': api_key, "user-agent": ua.random}
             availability = requests.get(availability_url, headers=headers)
             availability = json.loads(availability.text)
-            availability_list.append(availability)
-        return availability_list
+            availability_list_unformatted.append(availability)
+        return availability_list_unformatted
 
     def check_availability(availability_list, permit_entrance_id, start_date, end_date):
         count = 0
+        availability_list_formatted = []
         for month in availability_list:
             for key1, value1 in month.items():
                 for key2, value2 in value1.items():
@@ -58,7 +60,8 @@ def lambda_handler(event, context=None):
                         for key3, value3 in value2.items():
                             if key3 == permit_entrance_id:
                                 if month[key1][key2][key3]['remaining'] > 0 and month[key1][key2][key3]['remaining'] < 100:
-                                    print('this permit is available on', key2)
+                                    #print('this permit is available on', key2)
+                                    availability_list_formatted.append(key2)
                                     count += 1
                                 if month[key1][key2][key3]['remaining'] > 105:
                                     print(
@@ -66,6 +69,28 @@ def lambda_handler(event, context=None):
                                     quit()
         if count == 0:
             print("sorry this permit is not available in your selected range")
+
+        return availability_list_formatted
+
+    def send_email(availability_list_formatted):
+        body = ''
+        for date in availability_list_formatted:
+            body = body+'Your permit is available on '+ date
+            body = body+'\n'
+
+        print(body)
+        msg = EmailMessage()
+        msg['Subject'] = 'Permits that you requested have become available!'
+        msg['From'] = 'seankingus@gmail.com'
+        msg['To'] = 'seankingus@gmail.com'
+        msg.set_content(body)
+
+        with smtplib.SMTP_SSL('smtp.gmail.com',465) as smtp:
+
+            smtp.login('seankingus@gmail.com','drxyqcindfhfmhgd')
+
+            smtp.send_message(msg)
+
 
     api_key = event['api_key']
     starting_date_input = event['start_date']
@@ -89,8 +114,10 @@ def lambda_handler(event, context=None):
         url_list.append(temp_url)
 
     permit_entrance_id = get_permit_entrance_id()
-    availability_list = get_availability()
-    check_availability(availability_list, permit_entrance_id, start_date, end_date)
+    availability_list_unformatted = get_availability()
+    availability_list_formatted = check_availability(availability_list_unformatted, permit_entrance_id, start_date, end_date)
+
+    send_email(availability_list_formatted)
 
     return ('placeholder')
 
