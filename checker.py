@@ -57,8 +57,7 @@ def lambda_handler(event, context=None):
                     if start_date <= temp_date <= end_date:
                         for key3, value3 in value2.items():
                             if key3 == permit_entrance_id:
-                                if month[key1][key2][key3]['remaining'] > 0 and month[key1][key2][key3][
-                                    'remaining'] < 100:
+                                if month[key1][key2][key3]['remaining'] > 0 and month[key1][key2][key3]['remaining'] < 100:
                                     print('this permit is available on', key2)
                                     count += 1
                                 if month[key1][key2][key3]['remaining'] > 105:
@@ -68,7 +67,7 @@ def lambda_handler(event, context=None):
         if count == 0:
             print("sorry this permit is not available in your selected range")
 
-    api_key = 'ab3f1f1a-9cc2-4c20-bff6-dbf3a2d9fa96'
+    api_key = event['api_key']
     starting_date_input = event['start_date']
     ending_date_input = event['end_date']
     permit_entrance = event['permit_entrance']
@@ -94,3 +93,12 @@ def lambda_handler(event, context=None):
     check_availability(availability_list, permit_entrance_id, start_date, end_date)
 
     return ('placeholder')
+
+test1 = {
+  "start_date": "2022-08-10",
+  "end_date": "2022-08-31",
+  "permit_entrance": "JM05",
+  "api_key": "ab3f1f1a-9cc2-4c20-bff6-dbf3a2d9fa96"
+}
+
+lambda_handler(test1)
