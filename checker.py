@@ -8,6 +8,7 @@ import re
 import smtplib
 from email.message import EmailMessage
 import argparse
+from secrets import *
 
 
 def date_maker(date, start_of_month=False):
@@ -32,7 +33,7 @@ def format_months(months):
 def get_permit_entrance_id():
     entrance_url = 'https://ridb.recreation.gov/api/v1/facilities/233262/permitentrances'
     payload = {'query': permit_entrance}
-    headers = {'apikey': api_key}
+    headers = {'apikey': API_KEY}
     results = requests.get(entrance_url, headers=headers, params=payload)
     results = json.loads(results.text)
     permit_entrance_id = (results['RECDATA'][0]['PermitEntranceID'])
@@ -43,15 +44,15 @@ def get_availability():
     availability_list_unformatted = []
     for i in url_list:
         availability_url = i
-        headers = {'apikey': api_key, "user-agent": ua.random}
+        headers = {'apikey': API_KEY, "user-agent": ua.random}
         availability = requests.get(availability_url, headers=headers)
         availability = json.loads(availability.text)
         availability_list_unformatted.append(availability)
     return availability_list_unformatted
 
-def check_availability(availability_list, permit_entrance_id, start_date, end_date):
+def check_availability(availability_list, permit_entrance_id, start_date, end_date,group):
     count = 0
-    availability_list_formatted = []
+    availability_dict_formatted = {}
     for month in availability_list:
         for key1, value1 in month.items():
             for key2, value2 in value1.items():
@@ -59,9 +60,8 @@ def check_availability(availability_list, permit_entrance_id, start_date, end_da
                 if start_date <= temp_date <= end_date:
                     for key3, value3 in value2.items():
                         if key3 == permit_entrance_id:
-                            if month[key1][key2][key3]['remaining'] > 0 and month[key1][key2][key3]['remaining'] < 100:
-                                #print('this permit is available on', key2)
-                                availability_list_formatted.append(key2)
+                            if month[key1][key2][key3]['remaining'] >= group and month[key1][key2][key3]['remaining'] < 100:
+                                availability_dict_formatted[key2] = month[key1][key2][key3]['remaining']
                                 count += 1
                             if month[key1][key2][key3]['remaining'] > 105:
                                 print(
@@ -70,21 +70,33 @@ def check_availability(availability_list, permit_entrance_id, start_date, end_da
     if count == 0:
         print("sorry this permit is not available in your selected range")
 
-    return availability_list_formatted
+    return availability_dict_formatted
 
-def send_email(availability_list_formatted):
-    body = ''
-    for date in availability_list_formatted:
-        body = body + 'Your permit is available on ' + date
+def send_email(availability_dict_formatted):
+    body = "This is an automated message from Sean's Inyo National Forest permit checker. Permits that you have requested from recreation.gov have become available." + '\n'
+    body = body + '\n' + "Here is the informaton you entered for this trip:"
+    body = body + '\n' + "Starting Date: " + starting_date_input
+    body = body + '\n' + "Ending Date: " + ending_date_input
+    body = body + '\n' + "Permit Entrance Code: " + permit_entrance
+    body = body + '\n' + "Group Size: " + str(group_size)
+    body = body + '\n' + "API Key (for use with recreation.gov): " + API_KEY
+    body = body + '\n' + "Receiving Email Address: " + receiving_address + '\n' + '\n'
+
+    for date, available in availability_dict_formatted.items():
+        if available > 1:
+            body = body + 'There are ' + str(available) + ' permits available on ' + date
+        else:
+            body = body + 'There is ' + str(available) + ' permit available on ' + date
         body = body + '\n'
 
-    body = body + '\n' + 'You can reserve your permit here:' + '\n' + 'https://www.recreation.gov/permits/233262/registration/detailed-availability?date=2022-07-29&type=overnight-permit'
+    body = body + '\n' + 'You can reserve your permit here (note that you will have to enter your information again):'
+    body = body + '\n' + 'https://www.recreation.gov/permits/233262/registration/detailed-availability?date=2022-07-29&type=overnight-permit'
 
-    print(body)
+    #print(body)
     msg = EmailMessage()
     msg['Subject'] = 'Your permit for ' + permit_entrance + ' is available!'
     msg['From'] = 'seankingus@gmail.com'
-    msg['To'] = test1["receiving_email"]
+    msg['To'] = receiving_address
     msg.set_content(body)
 
     with smtplib.SMTP_SSL('smtp.gmail.com',465) as smtp:
@@ -93,19 +105,22 @@ def send_email(availability_list_formatted):
 
         smtp.send_message(msg)
 
-test1 = {
-"start_date": "2022-08-10",
-"end_date": "2022-08-31",
-"permit_entrance": "JM05",
-"api_key": "ab3f1f1a-9cc2-4c20-bff6-dbf3a2d9fa96",
-"receiving_email": "seankingus@gmail.com"
-}
+parser = argparse.ArgumentParser(description='finds permit availability for Inyo National Forest')
+parser.add_argument('start_date', type=str, help='your desired starting date in the format yyyy-mm-dd')
+parser.add_argument('end_date', type=str, help='your desired ending date in the format yyyy-mm-dd')
+parser.add_argument('permit_entrance_id', type=str, help='enter your permit entrance id from recreation.gov')
+parser.add_argument('receiving_address', type=str, help='enter the email you wish to receive updates from')
+parser.add_argument('group_size', type=str, help='enter your group size (max of 15)')
 
-api_key = test1['api_key']
-starting_date_input = test1['start_date']
-ending_date_input = test1['end_date']
-permit_entrance = test1['permit_entrance']
+args = parser.parse_args()
+
+permit_entrance = args.permit_entrance_id
+starting_date_input = args.start_date
+ending_date_input = args.end_date
+receiving_address = args.receiving_address
+group_size = int(args.group_size)
 url_list = []
+
 
 if permit_entrance == 'HH01':
     permit_entrance = "HH11"
@@ -124,5 +139,5 @@ for i in months:
 
 permit_entrance_id = get_permit_entrance_id()
 availability_list_unformatted = get_availability()
-availability_list_formatted = check_availability(availability_list_unformatted, permit_entrance_id, start_date, end_date)
-send_email(availability_list_formatted)
+availability_dict_formatted = check_availability(availability_list_unformatted, permit_entrance_id, start_date, end_date,group_size)
+send_email(availability_dict_formatted)
