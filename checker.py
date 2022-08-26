@@ -111,10 +111,7 @@ def inyo_permits(starting_date_input,ending_date_input,permit_entrance,receiving
                                 return True, 'This is a non quota permit. Reservations will sometimes release a week before, but there will always be an unlimited amount.'
 
     if count == 0:
-        print(bool)
-        print(starting_date_input)
         if bool == True:
-            print('I think it broke here')
             if 'This' in inyo_permits(str(datetime.date.today()),ending_date_input,permit_entrance,receiving_address,group_size)[1]:
                 return True, 'This is a non quota permit. Reservations will sometimes release a week before, but there will always be an unlimited amount.'
             else:
