@@ -7,9 +7,7 @@ from dateutil import rrule
 import re
 import smtplib
 from email.message import EmailMessage
-import argparse
 from secrets import *
-
 
 def date_maker(date, start_of_month=False):
     date = date.split('-')
@@ -111,7 +109,11 @@ def inyo_permits(starting_date_input,ending_date_input,permit_entrance,receiving
                                 return True, 'This is a non quota permit. Reservations will sometimes release a week before, but there will always be an unlimited amount.'
 
     if count == 0:
-        return False
+        if 'This' in inyo_permits(str(datetime.date.today()),ending_date_input,permit_entrance,receiving_address,group_size)[1]:
+            return True, 'This is a non quota permit. Reservations will sometimes release a week before, but there will always be an unlimited amount.'
+        else:
+            return False,""
+
 
     return True, availability_dict_formatted
 
@@ -122,7 +124,6 @@ for i in data['trailheads']:
     permit_entrance = i['ID']
     for trip in i['trips']:
         if len(trip) > 0:
-            print(trip)
             starting_date_input = trip['starting_entry_date']
             ending_date_input = trip['ending_entry_date']
             group_size = trip['group_size']
@@ -130,5 +131,4 @@ for i in data['trailheads']:
             checker = inyo_permits(starting_date_input, ending_date_input, permit_entrance, receiving_address,group_size)
             if checker[0]:
                 send_email(checker[1])
-
 
