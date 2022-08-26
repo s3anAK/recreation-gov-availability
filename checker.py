@@ -9,6 +9,8 @@ import smtplib
 from email.message import EmailMessage
 from secrets import *
 
+API_KEY = 'ab3f1f1a-9cc2-4c20-bff6-dbf3a2d9fa96'
+
 def date_maker(date, start_of_month=False):
     date = date.split('-')
     counter = 0
@@ -61,7 +63,7 @@ def send_email(availability_dict_formatted):
 
             smtp.send_message(msg)
 
-def inyo_permits(starting_date_input,ending_date_input,permit_entrance,receiving_address,group_size):
+def inyo_permits(starting_date_input,ending_date_input,permit_entrance,receiving_address,group_size,bool=False):
 
     start_date = date_maker(starting_date_input)
     start_of_month = date_maker(starting_date_input, True)
@@ -109,10 +111,16 @@ def inyo_permits(starting_date_input,ending_date_input,permit_entrance,receiving
                                 return True, 'This is a non quota permit. Reservations will sometimes release a week before, but there will always be an unlimited amount.'
 
     if count == 0:
-        if 'This' in inyo_permits(str(datetime.date.today()),ending_date_input,permit_entrance,receiving_address,group_size)[1]:
-            return True, 'This is a non quota permit. Reservations will sometimes release a week before, but there will always be an unlimited amount.'
+        print(bool)
+        print(starting_date_input)
+        if bool == True:
+            print('I think it broke here')
+            if 'This' in inyo_permits(str(datetime.date.today()),ending_date_input,permit_entrance,receiving_address,group_size)[1]:
+                return True, 'This is a non quota permit. Reservations will sometimes release a week before, but there will always be an unlimited amount.'
+            else:
+                return False,""
         else:
-            return False,""
+            pass
 
 
     return True, availability_dict_formatted
@@ -128,7 +136,7 @@ for i in data['trailheads']:
             ending_date_input = trip['ending_entry_date']
             group_size = trip['group_size']
             receiving_address = trip['email']
-            checker = inyo_permits(starting_date_input, ending_date_input, permit_entrance, receiving_address,group_size)
+            checker = inyo_permits(starting_date_input, ending_date_input, permit_entrance, receiving_address,group_size,True)
             if checker[0]:
                 send_email(checker[1])
 
