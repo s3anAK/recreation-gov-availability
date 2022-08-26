@@ -9,8 +9,6 @@ import smtplib
 from email.message import EmailMessage
 from secrets import *
 
-API_KEY = 'ab3f1f1a-9cc2-4c20-bff6-dbf3a2d9fa96'
-
 def date_maker(date, start_of_month=False):
     date = date.split('-')
     counter = 0
@@ -27,6 +25,7 @@ def date_maker(date, start_of_month=False):
 def send_email(availability_dict_formatted):
     body = "This is an automated message from Sean's Inyo National Forest permit checker. Permits that you have requested from recreation.gov have become available." + '\n'
     body = body + '\n' + "Here is the informaton you entered for this trip:"
+    body = body + '\n' + "Desired Trailhead: " + name
     body = body + '\n' + "Starting Date: " + starting_date_input
     body = body + '\n' + "Ending Date: " + ending_date_input
     body = body + '\n' + "Permit Entrance Code: " + permit_entrance
@@ -38,7 +37,7 @@ def send_email(availability_dict_formatted):
         availability_dict_formatted.items()
     except:
         body = availability_dict_formatted
-        subject = 'Your requested permit, ' + permit_entrance + ', is a non-quota entrance'
+        subject = 'Your requested permit, ' + name + ', is a non-quota entrance'
     else:
         for date, available in availability_dict_formatted.items():
             if available > 1:
@@ -49,7 +48,7 @@ def send_email(availability_dict_formatted):
 
         body = body + '\n' + 'You can reserve your permit here (note that you will have to enter your information again):'
         body = body + '\n' + 'https://www.recreation.gov/permits/233262/registration/detailed-availability?date=2022-07-29&type=overnight-permit'
-        subject = 'Your permit for ' + permit_entrance + ' is available!'
+        subject = 'Your permit for ' + name + ' is available!'
     finally:
         msg = EmailMessage()
         msg['Subject'] = subject
@@ -126,6 +125,7 @@ f= open('trips.json')
 data=json.load(f)
 
 for i in data['trailheads']:
+    name = i['name']
     permit_entrance = i['ID']
     for trip in i['trips']:
         if len(trip) > 0:
@@ -136,4 +136,6 @@ for i in data['trailheads']:
             checker = inyo_permits(starting_date_input, ending_date_input, permit_entrance, receiving_address,group_size,True)
             if checker[0]:
                 send_email(checker[1])
+
+
 
