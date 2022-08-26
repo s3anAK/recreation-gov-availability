@@ -8,6 +8,9 @@ import re
 import smtplib
 from email.message import EmailMessage
 from secrets import *
+import logging
+
+API_KEY = 'ab3f1f1a-9cc2-4c20-bff6-dbf3a2d9fa96'
 
 def date_maker(date, start_of_month=False):
     date = date.split('-')
@@ -121,6 +124,8 @@ def inyo_permits(starting_date_input,ending_date_input,permit_entrance,receiving
 
     return True, availability_dict_formatted
 
+logging.basicConfig(filename='logs.txt', level=logging.INFO,format='%(asctime)s %(message)s')
+
 f= open('trips.json')
 data=json.load(f)
 
@@ -136,6 +141,10 @@ for i in data['trailheads']:
             checker = inyo_permits(starting_date_input, ending_date_input, permit_entrance, receiving_address,group_size,True)
             if checker[0]:
                 send_email(checker[1])
+                logging.info('A successful call for ' + name + ' beginning on ' + starting_date_input + ' and ending on ' + ending_date_input + ' was executed.')
+            else:
+                logging.info('An unsuccessful call for ' + name + ' beginning on ' + starting_date_input + ' and ending on ' + ending_date_input + ' was executed.')
+
 
 
 
