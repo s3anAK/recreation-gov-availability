@@ -130,5 +130,5 @@ for i in data['trailheads']:
             checker = inyo_permits(starting_date_input, ending_date_input, permit_entrance, receiving_address,group_size)
             if checker[0]:
                 send_email(checker[1])
-            #else:
+
 
