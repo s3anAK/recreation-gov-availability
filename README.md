@@ -1,6 +1,6 @@
 # Inyo National Forest Permit Checker
 
-This is a simple python program that offers additional functionality for reserving Inyo National Forest permits from [recreation.gov](recreation.gov). These features include searching for several permits at once, searching for several date ranges at once, and an automatic email when your desired permits are found. This program is intended to run on a Linux machine but can be modified to run as a standalone python script.
+This is a simple python program that offers additional functionality for reserving Inyo National Forest permits from [recreation.gov](recreation.gov). These features include searching for several permits at once, searching for several date ranges at once, and an automatic email when your desired permits are found. This program is intended to run on a Linux machine in order to harness cronjobs to make full use of the email notificaton service.
 
 ## Installion
 
@@ -11,9 +11,11 @@ This is a simple python program that offers additional functionality for reservi
  - Run the following commands in the terminal: 
 ```
 chmod +x setup.sh
-./setup.sh
+./setup.sh API_KEY
 ```
-This will install all the necessary libaries and environments for the program. Assuming this runs sans errors, you are ready to go.
+where `API_KEY` is your recreation.gov api key. This can be obtained from ridb.recreation.gov. 
+
+These commands will install all the necessary libaries and environments for the program. Assuming this runs sans errors, you are ready to go.
 ## Usage
  - To run the program, run `./permit.sh` from whichever directory you installed the program to. 
 	 - There will be no output to the console when the program is run. If your desired permits are available, you will receive an email notifying you of this.
@@ -34,3 +36,8 @@ This will install all the necessary libaries and environments for the program. A
 
  - Of note is that this program does not actually reserve any permits for you. It is simply a tool to either lookup bulk availability for permits or to continually check for last minute cancellations of popular permits. You still must go to [recreation.gov](recreation.gov) to reserve your permits.
  - Due to inconsistent standards among various parks on recreation.gov, this program only works for the Inyo National Forest. Functionality may be added later to accomodate SEKI (Sequoia and Kings Canyon National Parks), but the Inyo National Forest covers permits for dozens of the Eastern Sierra's most stunning trailheads that should satisfy backpackers, climbers, fishermen, and wandering ascetics alike.
+
+## Credits
+
+ - Thanks to github.com/schlosser/yosemite-scraper for providing the inspiration to create this project.
+ - All data for searching for permits is taken from ridb.recreation.gov.
