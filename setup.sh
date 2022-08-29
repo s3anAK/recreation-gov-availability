@@ -6,3 +6,4 @@ virtualenv .
 source bin/activate
 pip install -r requirements.txt
 deactivate
+chmod +x permit.sh
