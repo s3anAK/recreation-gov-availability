@@ -1,6 +1,6 @@
-![Glacier Divide in the High Sierra](https://user-images.githubusercontent.com/56090826/187283263-a51866d9-29f2-472a-a528-5160ea6e934f.jpg)
-
 # Inyo National Forest Permit Checker
+
+![Glacier Divide in the High Sierra](https://user-images.githubusercontent.com/56090826/187283263-a51866d9-29f2-472a-a528-5160ea6e934f.jpg)
 
 This is a simple python program that offers additional functionality for reserving Inyo National Forest permits from [recreation.gov](recreation.gov). These features include searching for several permits at once, searching for several date ranges at once, and an automatic email when your desired permits are found. This program is intended to run on a Linux machine in order to harness cronjobs to make full use of the email notificaton service.
 
