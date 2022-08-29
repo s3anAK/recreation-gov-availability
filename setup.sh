@@ -1,4 +1,3 @@
-git clone https://github.com/s3anAK/recreation-gov-availability.git
 cd $(find ~/ -type d -name "recreation-gov-availability")
 rm -rf .git
 cp example.secrets.py secrets.py
