@@ -1,6 +1,6 @@
 # Inyo National Forest Permit Checker
 
-This is a simple python program that offers additional functionality for reserving Inyo National Forest permits from [recreation.gov](recreation.gov). These features include searching for several permits at once, searching for several date ranges at once, and an automatic email when your desired permits are found. This program is intended to run on a Linux machine in order to harness cronjobs to make full use of the email notificaton service.
+This is a simple python program that offers additional functionality for reserving Inyo National Forest permits from [recreation.gov](recreation.gov). These features include searching for several permits at once, searching for several date ranges at once, and an automatic email when your desired permits are found. This program is intended to run on a Linux machine but can be modified to run as a standalone python script.
 
 ## Installion
 
