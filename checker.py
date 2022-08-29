@@ -132,6 +132,8 @@ data=json.load(f)
 for i in data['trailheads']:
     name = i['name']
     permit_entrance = i['ID']
+    if permit_entrance == 'HH01':
+        permit_entrance = "HH11"
     for trip in i['trips']:
         if len(trip) > 0:
             starting_date_input = trip['starting_entry_date']
