@@ -8,7 +8,7 @@ This is a simple python program that offers additional functionality for reservi
 
  - Clone the repo onto your local machine using:
 ```
-	git clone https://github.com/s3anAK/recreation-gov-availability.git
+git clone https://github.com/s3anAK/recreation-gov-availability.git
 ```	
  - Run the following commands in the terminal: 
 ```
