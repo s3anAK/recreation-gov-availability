@@ -21,7 +21,7 @@ These commands will install all the necessary libaries and environments for the 
 ## Usage
  - To run the program, run `./permit.sh` from whichever directory you installed the program to. 
 	 - There will be no output to the console when the program is run. If your desired permits are available, you will receive an email notifying you of this.
-	 - Each time the program runs, a log of every query (one for each trip listed in `trips.json`) will be appear in `logs.txt`. You can use this to ensure that the program is running successfully, even if you are receiving emails because your desired permits are not available.
+	 - Each time the program runs, a log of every query (one for each trip listed in `trips.json`) will be appear in `logs.txt`. You can use this to ensure that the program is running successfully, even if you are not receiving emails because your desired permits are not available.
  - All trips are contained in the `trips.json` file. Each time the program runs, you may query an unlimited number of trailheads and trips per trailhead. Simply follow the syntax of the template trips provided.
 	 - `trailhead` is your desired entry trailhead. You do not need specific permits beyond your entry trailhead (excepting the Whitney Zone).
 		 - `name` is simply the name of the trailhead. This is not used in any queries, but rather to make the notification email more digestable as opposed to using the trailhead ID.
