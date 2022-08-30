@@ -12,6 +12,7 @@ git clone https://github.com/s3anAK/recreation-gov-availability.git
 ```	
  - Run the following commands in the terminal: 
 ```
+cd recreation-gov-availability
 chmod +x setup.sh
 ./setup.sh API_KEY
 ```
