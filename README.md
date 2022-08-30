@@ -30,8 +30,8 @@ These commands will install all the necessary libaries and environments for the 
 		 - `trips` refers to different trips from one trailhead. This could be trips that have different entry date ranges, trips with different group sizes, or trips with different notification emails.
 			 - `starting_entry_date` and `ending_entry_date` refer to the range of days that you could possibly enter at your desired trailhead. Since you only need a permit for your entry trailhead and day, this does **not** refer to your entry and exit dates. For example, imagine you are planning a trip and you could enter either Thursday (10/1), Friday (10/2) or Saturday (10/3). This means that `starting_entry_date` should be 10/1 and `ending_entry_date` should be 10/3.
 			 - `group_size` is the amount of people that will be using your permit.
-			 - `email` is the email address you wish to be notified at if your desired permits are available.
-- This program is most powerful when combined with a cron job to automatically search for available permits every x minutes. You may, of course, setup any cron job to work for your specific needs, but this one is simple and runs every 5 minutes:
+			 - `email` is the email address you wish to be notified at if your desired permits are available. Note that the default emails in in `trips.json` are not real emails and must be changed to your preferred email before the notification service will work.
+- This program is most powerful when combined with a cron job to automatically search for available permits every x minutes. You may, of course, setup any cron job to work for your specific needs, but this is an example of one that runs every 5 minutes:
 
 	`*/5 * * * * cd $(find ~/ -type d -name "recreation-gov-availability") && ./permit.sh`
 
