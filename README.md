@@ -16,7 +16,7 @@ cd recreation-gov-availability
 chmod +x setup.sh
 ./setup.sh API_KEY
 ```
-where `API_KEY` is your recreation.gov api key. This can be obtained from ridb.recreation.gov. 
+where `API_KEY` is your recreation.gov api key. This can be obtained from [ridb.recreation.gov](ridb.recreation.gov). 
 
 These commands will install all the necessary libaries and environments for the program. Assuming this runs sans errors, you are ready to go.
 ## Usage
@@ -42,5 +42,5 @@ These commands will install all the necessary libaries and environments for the 
 
 ## Credits
 
- - Thanks to github.com/schlosser/yosemite-scraper for providing the inspiration to create this project.
- - All data for searching for permits is taken from ridb.recreation.gov.
+ - Thanks to [github.com/schlosser/yosemite-scraper](github.com/schlosser/yosemite-scraper) for providing the inspiration to create this project.
+ - All data for searching for permits is taken from [ridb.recreation.gov](ridb.recreation.gov).
