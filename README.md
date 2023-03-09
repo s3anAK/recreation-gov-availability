@@ -20,7 +20,7 @@ cd recreation-gov-availability
 chmod +x setup.sh
 ./setup.sh
 ```
-- The setup script will prompt you to enter your API key, the Gmail account you wish to use for sending out any updates from this script, and associated Gmail app password (which is **NOT** your regular password; it is a special one that you can generate [here](https://myaccount.google.com/apppasswords)) These can also be manually entered into `.env`, which you will need to create within the directory containing this script.
+- The setup script will prompt you to enter your API key, the Gmail account you wish to use for sending out any updates from this script, and associated Gmail app password (which is **NOT** your regular password; it is a special one that you can generate [here](https://myaccount.google.com/apppasswords)). These can also be manually entered into `.env`, which you will need to create within the directory containing this script.
 
 `.env` contents:
 ```sh
