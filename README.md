@@ -2,9 +2,13 @@
 
 ![Glacier Divide in the High Sierra](https://user-images.githubusercontent.com/56090826/187283263-a51866d9-29f2-472a-a528-5160ea6e934f.jpg)
 
-This is a simple python program that offers additional functionality for reserving Inyo National Forest permits from [recreation.gov](recreation.gov). These features include searching for several permits at once, searching for several date ranges at once, and an automatic email when your desired permits are found. This program is intended to run on a Linux machine in order to harness cronjobs to make full use of the email notificaton service.
+This is a simple python program that offers additional functionality for reserving Inyo National Forest permits from [recreation.gov](https://www.recreation.gov). These features include searching for several permits at once, searching for several date ranges at once, and an automatic email when your desired permits are found. This program is intended to run on a Linux machine in order to harness cronjobs to make full use of the email notification service.
 
-## Installion
+## Prerequisites
+1. An API key from [ridb.recreation.gov](https://ridb.recreation.gov), which you can get in a few clicks with your existing [recreation.gov](https://www.recreation.gov) account.
+1. A Gmail account for sending out updates from this script and an associated [App Password](https://support.google.com/accounts/answer/185833?hl=en) for it.
+
+## Installation
 
  - Clone the repo onto your local machine using:
 ```
@@ -14,11 +18,21 @@ git clone https://github.com/s3anAK/recreation-gov-availability.git
 ```
 cd recreation-gov-availability
 chmod +x setup.sh
-./setup.sh API_KEY
+./setup.sh
 ```
-where `API_KEY` is your recreation.gov api key. This can be obtained from [ridb.recreation.gov](ridb.recreation.gov). 
+- The setup script will prompt you to enter your API key, the Gmail account you wish to use for sending out any updates from this script, and associated Gmail app password. These can also be manually entered into `.env`, which you will need to create within the directory containing this script.
 
-These commands will install all the necessary libaries and environments for the program. Assuming this runs sans errors, you are ready to go.
+`.env` contents:
+```sh
+API_KEY=api_key_here
+FROM_GMAIL=some_email@gmail.com
+FROM_GMAIL_APP_PASSWORD=the_app_password
+```
+
+**Note**: for compatibility with an external secret manager that can populate environment variables, `checker.py` will look for `API_KEY`, `FROM_GMAIL`, and `FROM_GMAIL_APP_PASSWORD` as environment variables first, and fall back to `.env` if the environment variables are not present. Therefore, `.env` is not needed if `API_KEY`, `FROM_GMAIL`, and `FROM_GMAIL_APP_PASSWORD` are present as environment variables.
+
+The above commands will install all the necessary libraries and environments for the program. Assuming this runs sans errors, you are ready to go.
+
 ## Usage
  - To run the program, run `./permit.sh` from whichever directory you installed the program to. 
 	 - There will be no output to the console when the program is run. If your desired permits are available, you will receive an email notifying you of this.
@@ -37,10 +51,10 @@ These commands will install all the necessary libaries and environments for the 
 
 ## Limitations
 
- - Of note is that this program does not actually reserve any permits for you. It is simply a tool to either lookup bulk availability for permits or to continually check for last minute cancellations of popular permits. You still must go to [recreation.gov](recreation.gov) to reserve your permits.
- - Due to inconsistent standards among various parks on recreation.gov, this program only works for the Inyo National Forest. Functionality may be added later to accomodate SEKI (Sequoia and Kings Canyon National Parks), but the Inyo National Forest covers permits for dozens of the Eastern Sierra's most stunning trailheads that should satisfy backpackers, climbers, fishermen, and wandering ascetics alike.
+ - Of note is that this program does not actually reserve any permits for you. It is simply a tool to either lookup bulk availability for permits or to continually check for last minute cancellations of popular permits. You still must go to [recreation.gov](https://www.recreation.gov) to reserve your permits.
+ - Due to inconsistent standards among various parks on recreation.gov, this program only works for the Inyo National Forest. Functionality may be added later to accommodate SEKI (Sequoia and Kings Canyon National Parks), but the Inyo National Forest covers permits for dozens of the Eastern Sierra's most stunning trailheads that should satisfy backpackers, climbers, fishermen, and wandering ascetics alike.
 
 ## Credits
 
- - Thanks to [github.com/schlosser/yosemite-scraper](github.com/schlosser/yosemite-scraper) for providing the inspiration to create this project.
- - All data for searching for permits is taken from [ridb.recreation.gov](ridb.recreation.gov).
+ - Thanks to [github.com/schlosser/yosemite-scraper](https://github.com/schlosser/yosemite-scraper) for providing the inspiration to create this project.
+ - All data for searching for permits is taken from [ridb.recreation.gov](https://ridb.recreation.gov).

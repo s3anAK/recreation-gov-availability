@@ -1,14 +1,31 @@
+from fake_useragent.settings import os
 import requests
 import datetime
 import calendar
 import json
+from dotenv import load_dotenv
 from fake_useragent import UserAgent
 from dateutil import rrule
 import re
 import smtplib
+import sys
 from email.message import EmailMessage
 from secrets import *
 import logging
+
+
+# Populate environment variables from .env if present, then read in environment variables.
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
+FROM_GMAIL = os.getenv("FROM_GMAIL")
+FROM_GMAIL_APP_PASSWORD = os.getenv("FROM_GMAIL_APP_PASSWORD")
+
+# Ensure all environment variables are set.
+environment_variables = {'api_key': API_KEY, 'from_gmail': FROM_GMAIL, 'from_gmail_app_password': FROM_GMAIL_APP_PASSWORD}
+for variable, value in environment_variables.items():
+    if value is None:
+        sys.exit(f"Missing environment variable {variable.upper()}. See README and .env")
+
 
 def date_maker(date, start_of_month=False):
     """
@@ -75,15 +92,14 @@ def send_email(availability_dict_formatted):
         # In both cases (string or dictionary), this code actually sends the email using whatever subject and body were defined above
         msg = EmailMessage()
         msg['Subject'] = subject
-        msg['From'] = 'seankingus@gmail.com'
+        msg['From'] = FROM_GMAIL
         msg['To'] = receiving_address
         msg.set_content(body)
 
         #Log into the mail server and send the email
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
 
-            smtp.login('seankingus@gmail.com', 'drxyqcindfhfmhgd')
-
+            smtp.login(FROM_GMAIL, FROM_GMAIL_APP_PASSWORD)
             smtp.send_message(msg)
 
 
@@ -185,6 +201,8 @@ for i in data['trailheads']:
             ending_date_input = trip['ending_entry_date']
             group_size = trip['group_size']
             receiving_address = trip['email']
+            if receiving_address == "placeholder@gmail.com":
+                sys.exit("Replace 'placeholder@gmail.com' in trips.json with your email address.")
             checker = inyo_permits(starting_date_input, ending_date_input, permit_entrance, receiving_address, group_size, True)
             # If the returned boolean is True, then send an email
             if checker[0]:
