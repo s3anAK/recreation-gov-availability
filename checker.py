@@ -167,11 +167,11 @@ def inyo_permits(starting_date_input, ending_date_input, permit_entrance, receiv
                             if month[key1][key2][key3]['remaining'] > 105:
                                 return True, 'This is a non quota permit. Reservations will sometimes release a week before, but there will always be an unlimited amount.'
 
-    # If there are no permits available for the dates selected, check the availability of permits for current day in case the permits have not been released yet
+    # If there are no permits available for the dates selected, check the availability of permits for any day in case the permits have not been released yet
     # If those are still no permits available, return nothing
     if count == 0:
         if bool == True:
-            if 'This' in inyo_permits(str(datetime.date.today()), ending_date_input, permit_entrance, receiving_address, group_size)[1]:
+            if 'This' in inyo_permits(str(datetime.date.today()), "2024-11-01", permit_entrance, receiving_address, group_size)[1]:
                 return True, 'This is a non quota permit. Reservations will sometimes release a week before, but there will always be an unlimited amount.'
             else:
                 return False, ""
