@@ -4,6 +4,8 @@
 
 This is a simple python program that offers additional functionality for reserving Inyo National Forest permits from [recreation.gov](https://www.recreation.gov). These features include searching for several permits at once, searching for several date ranges at once, and an automatic email when your desired permits are found. This program is intended to run on a Linux machine in order to harness cronjobs to make full use of the email notification service.
 
+**Note (3/17): I accidentally broke the program with the latest merge, oops. I will fix it when I have some more time to troubleshoot what is happening. Sorry to all my dedicated users :( **
+
 ## Prerequisites
 1. An API key from [ridb.recreation.gov](https://ridb.recreation.gov), which you can get in a few clicks with your existing [recreation.gov](https://www.recreation.gov) account.
 1. A Gmail account for sending out updates from this script and an associated [App Password](https://support.google.com/accounts/answer/185833?hl=en) for it.
